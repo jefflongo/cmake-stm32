@@ -25,7 +25,7 @@ DEFS = STM32L412xx USE_FULL_LL_DRIVER
 
 SOURCES = \
 	src/app \
-	src/board \
+	src/board/stm32l412 \
 	STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Source/Templates/gcc/startup_stm32l412xx.s \
 	STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Source/Templates/system_stm32l4xx.c \
 	STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_gpio.c \
@@ -35,7 +35,7 @@ SOURCES = \
 
 
 INC_DIRS = \
-	src/board/stm32l412 \
+	src/board/common/include \
 	STM32CubeL4/Drivers/CMSIS/Core/Include \
 	STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include \
 	STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc \
