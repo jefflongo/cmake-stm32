@@ -9,6 +9,20 @@ set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}g++)
 set(CMAKE_OBJCOPY ${TOOLCHAIN_PREFIX}objcopy)
 set(CMAKE_SIZE ${TOOLCHAIN_PREFIX}size)
 
+set(WARNINGS       
+  "-Wall -Wextra -Wpedantic -Wfatal-errors -Wno-unused-parameter"
+)
+
+set(C_FLAGS
+  "-fdata-sections -ffunction-sections -MMD -MP"
+)
+
+set(CMAKE_ASM_FLAGS "-x assembler-with-cpp" CACHE INTERNAL "")
+set(CMAKE_C_FLAGS "${C_FLAGS} ${WARNINGS}" CACHE INTERNAL "")
+
+set(CMAKE_C_FLAGS_DEBUG "-Og -g -gdwarf-2" CACHE INTERNAL "")
+set(CMAKE_C_FLAGS_RELEASE "-Og" CACHE INTERNAL "")
+
 set(CMAKE_EXECUTABLE_SUFFIX_ASM .elf)
 set(CMAKE_EXECUTABLE_SUFFIX_C .elf)
 set(CMAKE_EXECUTABLE_SUFFIX_CXX .elf)

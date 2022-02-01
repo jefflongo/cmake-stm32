@@ -22,8 +22,7 @@ set(SOURCES
 add_executable(exe_stm32l412 ${SOURCES})
 target_link_libraries(exe_stm32l412 PRIVATE
   -T${CMAKE_SOURCE_DIR}/src/stm32l412.ld
-  stm32 board_stm32l412
+  stm32l4 board_stm32l412
 )
 
-
-include(stm32conf.cmake)
+include(stm32l4.cmake)
