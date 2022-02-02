@@ -13,6 +13,9 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
+include(cmake/stm32cubel4.cmake)
+find_stm32cubel4(stm32l412)
+
 add_subdirectory(src/board/stm32l412)
 
 set(SOURCES src/app/main.c)
