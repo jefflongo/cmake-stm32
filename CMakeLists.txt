@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 
 # I promise these are temporary..
-set(CMAKE_TOOLCHAIN_FILE ../arm-none-eabi.cmake)
+set(CMAKE_TOOLCHAIN_FILE ../cmake/cortex-m4.cmake)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -15,14 +15,8 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 add_subdirectory(src/board/stm32l412)
 
-set(SOURCES
-  src/app/main.c
-)
+set(SOURCES src/app/main.c)
 
 add_executable(exe_stm32l412 ${SOURCES})
-target_link_libraries(exe_stm32l412 PRIVATE
-  -T${CMAKE_SOURCE_DIR}/src/stm32l412.ld
-  stm32l4 board_stm32l412
-)
-
-include(stm32l4.cmake)
+target_link_libraries(
+  exe_stm32l412 PRIVATE -T${CMAKE_SOURCE_DIR}/src/stm32l412.ld board_stm32l412)
