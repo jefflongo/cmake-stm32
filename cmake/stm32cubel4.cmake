@@ -54,22 +54,24 @@ function(generate_stm32cubel4 mcu)
   endforeach()
 
   # build CMSIS
-  add_library(${mcu_lower} OBJECT
+  set(library_name ${mcu_lower}_cmsis)
+  add_library(${library_name} STATIC
     ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Source/Templates/gcc/startup_${mcu_lower}xx.s
     ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Source/Templates/system_stm32l4xx.c
   )
-  target_compile_definitions(${mcu_lower} PUBLIC -D${mcu_upper}xx)
-  target_include_directories(${mcu_lower} PUBLIC
+  target_compile_definitions(${library_name} PUBLIC -D${mcu_upper}xx)
+  target_include_directories(${library_name} PUBLIC
     ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/CMSIS/Core/Include
     ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include
   )
 
   # build HAL libraries
   foreach(driver IN LISTS hal_drivers)
-    add_library(stm32l4_hal_${driver} OBJECT
+    set(libray_name ${mcu_lower}_hal_${driver})
+    add_library(${libray_name} STATIC
       ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_${driver}.c)
-    target_compile_definitions(stm32l4_hal_${driver} PUBLIC -D${mcu_upper}xx -DUSE_HAL_DRIVER)
-    target_include_directories(stm32l4_hal_${driver} PUBLIC
+    target_compile_definitions(${libray_name} PUBLIC -D${mcu_upper}xx -DUSE_HAL_DRIVER)
+    target_include_directories(${libray_name} PUBLIC
       ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/CMSIS/Core/Include
       ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include
       ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc
@@ -78,10 +80,11 @@ function(generate_stm32cubel4 mcu)
 
   # build LL libraries
   foreach(driver IN LISTS ll_drivers)
-    add_library(stm32l4_ll_${driver} OBJECT
+    set(libray_name ${mcu_lower}_ll_${driver})
+    add_library(${libray_name} STATIC
       ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_${driver}.c)
-    target_compile_definitions(stm32l4_ll_${driver} PUBLIC -D${mcu_upper}xx -DUSE_FULL_LL_DRIVER)
-    target_include_directories(stm32l4_ll_${driver} PUBLIC
+    target_compile_definitions(${libray_name} PUBLIC -D${mcu_upper}xx -DUSE_FULL_LL_DRIVER)
+    target_include_directories(${libray_name} PUBLIC
       ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/CMSIS/Core/Include
       ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include
       ${CMAKE_SOURCE_DIR}/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc
