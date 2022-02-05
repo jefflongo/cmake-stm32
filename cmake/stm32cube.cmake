@@ -73,29 +73,31 @@ function(generate_stm32cube mcu)
       ${STM32CUBE_PATH}/Drivers/CMSIS/Core/Include
       ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Include
   )
+  add_library(stm32::${library_name} ALIAS ${library_name})
 
   # build HAL libraries
   foreach(driver IN LISTS hal_drivers)
-    set(libray_name ${mcu_lower}_hal_${driver})
+    set(library_name ${mcu_lower}_hal_${driver})
     add_library(
-      ${libray_name} STATIC
+      ${library_name} STATIC
       ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_hal_${driver}.c
     )
-    target_compile_definitions(${libray_name} PUBLIC -D${mcu_upper}xx
+    target_compile_definitions(${library_name} PUBLIC -D${mcu_upper}xx
                                                      -DUSE_HAL_DRIVER)
     target_include_directories(
-      ${libray_name}
+      ${library_name}
       PUBLIC
         ${STM32CUBE_PATH}/Drivers/CMSIS/Core/Include
         ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Include
         ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Inc)
+    # add_library(stm32::${library_name} ALIAS ${library_name})
   endforeach()
 
   # build LL libraries
   foreach(driver IN LISTS ll_drivers)
-    set(libray_name ${mcu_lower}_ll_${driver})
+    set(library_name ${mcu_lower}_ll_${driver})
     add_library(
-      ${libray_name} STATIC
+      ${library_name} STATIC
       ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_ll_${driver}.c
     )
     set(defs -D${mcu_upper}xx)
@@ -104,12 +106,13 @@ function(generate_stm32cube mcu)
       # the full LL driver if associated HAL driver is not used
       list(APPEND defs -DUSE_FULL_LL_DRIVER)
     endif()
-    target_compile_definitions(${libray_name} PUBLIC ${defs})
+    target_compile_definitions(${library_name} PUBLIC ${defs})
     target_include_directories(
-      ${libray_name}
+      ${library_name}
       PUBLIC
         ${STM32CUBE_PATH}/Drivers/CMSIS/Core/Include
         ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Include
         ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Inc)
+    add_library(stm32::${library_name} ALIAS ${library_name})
   endforeach()
 endfunction()
