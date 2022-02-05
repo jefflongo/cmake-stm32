@@ -1,54 +1,79 @@
 set(HAL_DRIVERS_L4
     adc
+    adc_ex
     can
     comp
     cortex
     crc
+    crc_ex
     cryp
+    cryp_ex
     dac
+    dac_ex
     dcmi
     dfsdm
-    dma
+    dfsdm_ex
     dma2d
+    dma
+    dma_ex
     dsi
     exti
     firewall
     flash
+    flash_ex
     flash_ramfunc
     gfxmmu
     gpio
     hash
+    hash_ex
     hcd
     i2c
+    i2c_ex
     irda
     iwdg
     lcd
     lptim
     ltdc
+    ltdc_ex
     mmc
+    mmc_ex
     nand
     nor
     opamp
+    opamp_ex
     ospi
     pcd
+    pcd_ex
     pka
     pssi
     pwr
+    pwr_ex
     qspi
     rcc
+    rcc_ex
     rng
+    rng_ex
     rtc
+    rtc_ex
     sai
+    sai_ex
     sd
+    sd_ex
     smartcard
+    smartcard_ex
     smbus
+    smbus_ex
     spi
+    spi_ex
     sram
     swpmi
     tim
+    tim_ex
     tsc
     uart
+    uart_ex
     usart
+    usart_ex
     wwdg)
 
 set(LL_DRIVERS_L4
@@ -57,8 +82,8 @@ set(LL_DRIVERS_L4
     crc
     crs
     dac
-    dma
     dma2d
+    dma
     exti
     fmc
     gpio

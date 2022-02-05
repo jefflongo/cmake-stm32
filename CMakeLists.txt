@@ -13,9 +13,9 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-include(cmake/stm32cubel4.cmake)
+include(cmake/stm32cube.cmake)
 set(ll_libs gpio utils pwr rcc)
-generate_stm32cubel4(stm32l412 LL_LIBS ${ll_libs})
+generate_stm32cube(stm32l412 LL_LIBS ${ll_libs})
 
 add_subdirectory(src/board/stm32l412)
 
