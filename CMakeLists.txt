@@ -23,7 +23,4 @@ set(SOURCES src/app/main.c)
 
 add_executable(exe_stm32l412 ${SOURCES})
 target_link_libraries(
-  exe_stm32l412 PRIVATE 
-  -T${CMAKE_SOURCE_DIR}/src/stm32l412.ld 
-  board_stm32l412
-)
+  exe_stm32l412 PRIVATE -T${CMAKE_SOURCE_DIR}/src/stm32l412.ld board_stm32l412)

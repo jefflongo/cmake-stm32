@@ -23,7 +23,7 @@ set(CMAKE_C_FLAGS_INIT
 set(CMAKE_EXE_LINKER_FLAGS_INIT
     "${CPU_FLAGS} ${LINK_FLAGS}"
     CACHE INTERNAL "executable linker flags")
-    
+
 set(CMAKE_C_FLAGS_DEBUG
     "-Og -g -gdwarf-2"
     CACHE INTERNAL "c compiler debug flags")
