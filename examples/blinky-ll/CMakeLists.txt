@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 # I promise these are temporary..
-set(CMAKE_TOOLCHAIN_FILE ../cmake/cortex-m4.cmake)
+set(CMAKE_TOOLCHAIN_FILE ../../cmake/cortex-m4.cmake)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -13,11 +13,10 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../cmake)
 find_package(STM32Cube)
 
-set(ll_libs gpio utils pwr rcc)
-generate_stm32cube(stm32l412 LL_LIBS ${ll_libs})
+generate_stm32cube(stm32l412 LL_DRIVERS gpio utils pwr rcc)
 
 add_subdirectory(src/board/stm32l412)
 

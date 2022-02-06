@@ -5,7 +5,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/stm32cube_drivers.cmake)
 function(generate_stm32cube mcu)
   set(options)
   set(args)
-  set(list_args HAL_LIBS LL_LIBS)
+  set(list_args HAL_DRIVERS LL_DRIVERS)
   cmake_parse_arguments(PARSE_ARGV 1 ARG "${options}" "${args}" "${list_args}")
 
   foreach(arg IN LISTS ARG_UNPARSED_ARGUMENTS)
@@ -25,39 +25,50 @@ function(generate_stm32cube mcu)
   set(type_core_upper ${CMAKE_MATCH_1})
   string(TOLOWER ${type_core_upper} type_core_lower)
 
-  # validate HAL libraries
-  list(REMOVE_DUPLICATES ARG_HAL_LIBS)
-  foreach(lib IN LISTS ARG_HAL_LIBS)
-    if(lib IN_LIST HAL_DRIVERS_${type_core_upper})
-      message(VERBOSE "Adding HAL library: ${lib}")
-      list(APPEND hal_drivers ${lib})
+  # validate HAL drivers
+  list(REMOVE_DUPLICATES ARG_HAL_DRIVERS)
+  foreach(driver IN LISTS ARG_HAL_DRIVERS)
+    if(driver IN_LIST HAL_DRIVERS_${type_core_upper})
+      message(VERBOSE "Adding HAL driver: ${driver}")
+      list(APPEND hal_drivers ${driver})
     else()
-      message(WARNING "Invalid HAL library: ${lib}")
-      list(REMOVE_ITEM hal_drivers ${lib})
+      message(WARNING "Invalid HAL driver: ${driver}")
+      list(REMOVE_ITEM hal_drivers ${driver})
     endif()
   endforeach()
 
-  # validate LL libraries
-  list(REMOVE_DUPLICATES ARG_LL_LIBS)
-  foreach(lib IN LISTS ARG_LL_LIBS)
-    if(lib IN_LIST LL_DRIVERS_${type_core_upper})
-      message(VERBOSE "Adding LL library: ${lib}")
-      list(APPEND ll_drivers ${lib})
+  # validate LL drivers
+  list(REMOVE_DUPLICATES ARG_LL_DRIVERS)
+  foreach(driver IN LISTS ARG_LL_DRIVERS)
+    if(driver IN_LIST LL_DRIVERS_${type_core_upper})
+      message(VERBOSE "Adding LL driver: ${driver}")
+      list(APPEND ll_drivers ${driver})
     else()
-      message(WARNING "Invalid LL library: ${lib}")
-      list(REMOVE_ITEM ll_drivers ${lib})
+      message(WARNING "Invalid LL driver: ${driver}")
+      list(REMOVE_ITEM ll_drivers ${driver})
     endif()
   endforeach()
 
   # get path to cube library
   if(STM32CUBE${type_core_upper}_PATH)
-    set(STM32CUBE_PATH "${STM32CUBE${type_core_upper}_PATH}")
+    get_filename_component(STM32CUBE_PATH ${STM32CUBE${type_core_upper}_PATH}
+                           REALPATH)
   else()
     message(
-      STATUS
+      WARNING
         "STM32CUBE${type_core_upper}_PATH not set, defaulting to /opt/STM32Cube${type_core_upper}"
     )
     set(STM32CUBE_PATH "/opt/STM32Cube${type_core_upper}")
+  endif()
+
+  # check if the cube path actually exists
+  if(NOT
+     ((EXISTS ${STM32CUBE_PATH})
+      AND (IS_DIRECTORY ${STM32CUBE_PATH})
+      AND (${STM32CUBE_PATH} MATCHES "STM32Cube[FGHLUW][0-9]$")))
+    message(
+      FATAL_ERROR
+        "Invalid path to STM32Cube${type_core_upper}: ${STM32CUBE_PATH}")
   endif()
   message(VERBOSE "Path to STM32Cube${type_core_upper}: ${STM32CUBE_PATH}")
 
@@ -85,7 +96,7 @@ function(generate_stm32cube mcu)
       ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_hal_${driver}.c
     )
     target_compile_definitions(${library_name} PUBLIC -D${mcu_upper}xx
-                                                     -DUSE_HAL_DRIVER)
+                                                      -DUSE_HAL_DRIVER)
     target_include_directories(
       ${library_name}
       PUBLIC
@@ -120,10 +131,9 @@ function(generate_stm32cube mcu)
 endfunction()
 
 set(STM32Cube_VERSION 0.1.0)
-set(STM32Cube_REQUIRED_VARS "")
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(STM32Cube 
-  VERSION_VAR STM32Cube_VERSION 
-  HANDLE_COMPONENTS
-)
+find_package_handle_standard_args(
+  STM32Cube
+  VERSION_VAR STM32Cube_VERSION
+  HANDLE_COMPONENTS)

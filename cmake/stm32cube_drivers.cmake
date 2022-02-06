@@ -1,3 +1,5 @@
+# TODO: add support for the other cube libraries
+
 set(HAL_DRIVERS_L4
     adc
     adc_ex
