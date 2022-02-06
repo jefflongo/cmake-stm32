@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.18)
+
 include(${CMAKE_CURRENT_LIST_DIR}/stm32cube_drivers.cmake)
 
 function(generate_stm32cube mcu)
@@ -116,3 +118,12 @@ function(generate_stm32cube mcu)
     add_library(stm32::${library_name} ALIAS ${library_name})
   endforeach()
 endfunction()
+
+set(STM32Cube_VERSION 0.1.0)
+set(STM32Cube_REQUIRED_VARS "")
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(STM32Cube 
+  VERSION_VAR STM32Cube_VERSION 
+  HANDLE_COMPONENTS
+)

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.18)
 
 # I promise these are temporary..
 set(CMAKE_TOOLCHAIN_FILE ../cmake/cortex-m4.cmake)
@@ -13,7 +13,9 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-include(cmake/stm32cube.cmake)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+find_package(STM32Cube)
+
 set(ll_libs gpio utils pwr rcc)
 generate_stm32cube(stm32l412 LL_LIBS ${ll_libs})
 
