@@ -9,7 +9,7 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 # add the path containng `FindSTM32Cube.cmake` to `CMAKE_MODULE_PATH`
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../cmake)
-find_package(STM32Cube)
+find_package(STM32Cube REQUIRED)
 generate_stm32cube(stm32l412 LL_DRIVERS gpio utils pwr rcc)
 
 add_executable(blinky main.c)

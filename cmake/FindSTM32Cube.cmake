@@ -28,6 +28,7 @@ function(generate_stm32cube mcu)
   # validate HAL drivers
   list(REMOVE_DUPLICATES ARG_HAL_DRIVERS)
   foreach(driver IN LISTS ARG_HAL_DRIVERS)
+    string(TOLOWER ${driver} driver)
     if(driver IN_LIST HAL_DRIVERS_${type_core_upper})
       message(VERBOSE "Adding HAL driver: ${driver}")
       list(APPEND hal_drivers ${driver})
@@ -40,6 +41,7 @@ function(generate_stm32cube mcu)
   # validate LL drivers
   list(REMOVE_DUPLICATES ARG_LL_DRIVERS)
   foreach(driver IN LISTS ARG_LL_DRIVERS)
+    string(TOLOWER ${driver} driver)
     if(driver IN_LIST LL_DRIVERS_${type_core_upper})
       message(VERBOSE "Adding LL driver: ${driver}")
       list(APPEND ll_drivers ${driver})
@@ -88,12 +90,12 @@ function(generate_stm32cube mcu)
   )
   add_library(stm32::${library_name} ALIAS ${library_name})
 
-  # build HAL libraries
-  foreach(driver IN LISTS hal_drivers)
-    set(library_name ${mcu_lower}_hal_${driver})
+  # build HAL as a link dependency for HAL drivers
+  if(hal_drivers)
+    set(library_name ${mcu_lower}_hal)
     add_library(
-      ${library_name} STATIC
-      ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_hal_${driver}.c
+      ${library_name} OBJECT
+      ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_hal.c
     )
     target_compile_definitions(${library_name} PUBLIC -D${mcu_upper}xx
                                                       -DUSE_HAL_DRIVER)
@@ -103,7 +105,17 @@ function(generate_stm32cube mcu)
         ${STM32CUBE_PATH}/Drivers/CMSIS/Core/Include
         ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Include
         ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Inc)
-    # add_library(stm32::${library_name} ALIAS ${library_name})
+  endif()
+
+  # build HAL libraries
+  foreach(driver IN LISTS hal_drivers)
+    set(library_name ${mcu_lower}_hal_${driver})
+    add_library(
+      ${library_name} STATIC
+      ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_hal_${driver}.c
+    )
+    target_link_libraries(${library_name} PUBLIC ${mcu_lower}_hal)
+    add_library(stm32::${library_name} ALIAS ${library_name})
   endforeach()
 
   # build LL libraries

@@ -6,7 +6,8 @@ set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}g++)
 set(CMAKE_OBJCOPY ${TOOLCHAIN_PREFIX}objcopy)
 set(CMAKE_SIZE ${TOOLCHAIN_PREFIX}size)
 
-set(WARNINGS "-Wall -Wextra -Wpedantic -Wfatal-errors -Wno-unused-parameter")
+set(WARNINGS
+    "-Wall -Wextra -Wpedantic -Wfatal-errors -Wno-unused-parameter -Werror")
 set(C_FLAGS "-fdata-sections -ffunction-sections -MMD -MP")
 set(LINK_FLAGS
     "--specs=nano.specs -lc -lm -lnosys -Wl,-Map=out.map,--cref -Wl,--gc-sections -Wl,--print-memory-usage"
