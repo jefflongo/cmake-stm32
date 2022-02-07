@@ -4,8 +4,8 @@
 #include <stm32l4xx_ll_rcc.h>
 #include <stm32l4xx_ll_utils.h>
 
-#define LED_PIN LL_GPIO_PIN_13
-#define LED_PORT GPIOB
+#define LED_PIN LL_GPIO_PIN_5
+#define LED_PORT GPIOA
 
 void board_init(void) {
     // init systick
@@ -13,7 +13,7 @@ void board_init(void) {
     LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
 
     // init led
-    LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOB);
+    LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
     LL_GPIO_SetPinMode(LED_PORT, LED_PIN, LL_GPIO_MODE_OUTPUT);
     LL_GPIO_SetPinOutputType(LED_PORT, LED_PIN, LL_GPIO_OUTPUT_PUSHPULL);
 }

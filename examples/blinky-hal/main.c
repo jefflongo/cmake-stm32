@@ -15,6 +15,7 @@ int main(int argc, char const* argv[]) {
     HAL_Init();
 
     // init led
+    __HAL_RCC_GPIOB_CLK_ENABLE();
     GPIO_InitTypeDef led = {
         .Pin = LED_PIN,
         .Mode = GPIO_MODE_OUTPUT_PP,
