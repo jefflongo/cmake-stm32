@@ -10,7 +10,7 @@ set(WARNINGS
     "-Wall -Wextra -Wpedantic -Wfatal-errors -Wno-unused-parameter -Werror")
 set(C_FLAGS "-fdata-sections -ffunction-sections -MMD -MP")
 set(LINK_FLAGS
-    "--specs=nano.specs -lc -lm -lnosys -Wl,-Map=out.map,--cref -Wl,--gc-sections -Wl,--print-memory-usage"
+    "--specs=nano.specs --specs=nosys.specs -lc -lm -Wl,-Map=out.map,--cref -Wl,--gc-sections -Wl,--print-memory-usage"
 )
 
 set(CMAKE_ASM_FLAGS_INIT
