@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.21)
 
 include(${CMAKE_CURRENT_LIST_DIR}/stm32cube_drivers.cmake)
 
@@ -75,54 +75,74 @@ function(generate_stm32cube mcu)
   message(VERBOSE "Path to STM32Cube${type_core_upper}: ${STM32CUBE_PATH}")
 
   # build CMSIS
-  set(library_name ${mcu_lower}_cmsis)
   add_library(
-    ${library_name} STATIC
+    _${mcu_lower}_cmsis OBJECT
     ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Source/Templates/gcc/startup_${mcu_lower}xx.s
     ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Source/Templates/system_stm32${type_core_lower}xx.c
   )
-  target_compile_definitions(${library_name} PUBLIC -D${mcu_upper}xx)
+  target_compile_definitions(_${mcu_lower}_cmsis PUBLIC -D${mcu_upper}xx)
   target_include_directories(
-    ${library_name}
+    _${mcu_lower}_cmsis
     PUBLIC
       ${STM32CUBE_PATH}/Drivers/CMSIS/Core/Include
       ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Include
   )
-  add_library(stm32::${library_name} ALIAS ${library_name})
+
+  # create interface library to inherit usage requirements from object
+  add_library(${mcu_lower}_cmsis INTERFACE)
+  target_link_libraries(
+    ${mcu_lower}_cmsis INTERFACE _${mcu_lower}_cmsis
+                                 $<TARGET_OBJECTS:_${mcu_lower}_cmsis>)
+
+  # create alias for namespacing
+  add_library(stm32::${mcu_lower}_cmsis ALIAS ${mcu_lower}_cmsis)
 
   # build HAL as a link dependency for HAL drivers
   if(hal_drivers)
-    set(library_name ${mcu_lower}_hal)
     add_library(
-      ${library_name} OBJECT
+      _${mcu_lower}_hal OBJECT
       ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_hal.c
     )
-    target_compile_definitions(${library_name} PUBLIC -D${mcu_upper}xx
-                                                      -DUSE_HAL_DRIVER)
+    target_compile_definitions(_${mcu_lower}_hal PUBLIC -D${mcu_upper}xx
+                                                        -DUSE_HAL_DRIVER)
     target_include_directories(
-      ${library_name}
+      _${mcu_lower}_hal
       PUBLIC
         ${STM32CUBE_PATH}/Drivers/CMSIS/Core/Include
         ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Include
         ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Inc)
+
+    # create interface library to inherit usage requirements from object
+    add_library(${mcu_lower}_hal INTERFACE)
+    target_link_libraries(
+      ${mcu_lower}_hal INTERFACE _${mcu_lower}_hal
+                                 $<TARGET_OBJECTS:_${mcu_lower}_hal>)
   endif()
 
   # build HAL libraries
   foreach(driver IN LISTS hal_drivers)
-    set(library_name ${mcu_lower}_hal_${driver})
     add_library(
-      ${library_name} STATIC
+      _${mcu_lower}_hal_${driver} OBJECT
       ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_hal_${driver}.c
     )
-    target_link_libraries(${library_name} PUBLIC ${mcu_lower}_hal)
-    add_library(stm32::${library_name} ALIAS ${library_name})
+    target_link_libraries(_${mcu_lower}_hal_${driver} PUBLIC ${mcu_lower}_hal)
+
+    # create interface library to inherit usage requirements from object
+    add_library(${mcu_lower}_hal_${driver} INTERFACE)
+    target_link_libraries(
+      ${mcu_lower}_hal_${driver}
+      INTERFACE _${mcu_lower}_hal_${driver}
+                $<TARGET_OBJECTS:_${mcu_lower}_hal_${driver}>)
+
+    # create alias for namespacing
+    add_library(stm32::${mcu_lower}_hal_${driver} ALIAS
+                ${mcu_lower}_hal_${driver})
   endforeach()
 
   # build LL libraries
   foreach(driver IN LISTS ll_drivers)
-    set(library_name ${mcu_lower}_ll_${driver})
     add_library(
-      ${library_name} STATIC
+      _${mcu_lower}_ll_${driver} OBJECT
       ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Src/stm32${type_core_lower}xx_ll_${driver}.c
     )
     set(defs -D${mcu_upper}xx)
@@ -131,14 +151,24 @@ function(generate_stm32cube mcu)
       # the full LL driver if associated HAL driver is not used
       list(APPEND defs -DUSE_FULL_LL_DRIVER)
     endif()
-    target_compile_definitions(${library_name} PUBLIC ${defs})
+    target_compile_definitions(_${mcu_lower}_ll_${driver} PUBLIC ${defs})
     target_include_directories(
-      ${library_name}
+      _${mcu_lower}_ll_${driver}
       PUBLIC
         ${STM32CUBE_PATH}/Drivers/CMSIS/Core/Include
         ${STM32CUBE_PATH}/Drivers/CMSIS/Device/ST/STM32${type_core_upper}xx/Include
         ${STM32CUBE_PATH}/Drivers/STM32${type_core_upper}xx_HAL_Driver/Inc)
-    add_library(stm32::${library_name} ALIAS ${library_name})
+
+    # create interface library to inherit usage requirements from object
+    add_library(${mcu_lower}_ll_${driver} INTERFACE)
+    target_link_libraries(
+      ${mcu_lower}_ll_${driver}
+      INTERFACE _${mcu_lower}_ll_${driver}
+                $<TARGET_OBJECTS:_${mcu_lower}_ll_${driver}>)
+
+    # create alias for namespacing
+    add_library(stm32::${mcu_lower}_ll_${driver} ALIAS
+                ${mcu_lower}_ll_${driver})
   endforeach()
 endfunction()
 
