@@ -67,7 +67,7 @@ function(generate_stm32cube mcu)
   if(NOT
      ((EXISTS ${STM32CUBE_PATH})
       AND (IS_DIRECTORY ${STM32CUBE_PATH})
-      AND (${STM32CUBE_PATH} MATCHES "STM32Cube[FGHLUW][0-9]$")))
+      AND (${STM32CUBE_PATH} MATCHES "STM32Cube[FGHLUW][0-9]")))
     message(
       FATAL_ERROR
         "Invalid path to STM32Cube${type_core_upper}: ${STM32CUBE_PATH}")

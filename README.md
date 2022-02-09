@@ -24,7 +24,7 @@ Optionally, specify `-DCMAKE_BUILD_TYPE` as `Debug`, `Release`, `RelWithDebInfo`
 As an example, the following will compile the `blinky-hal` project with the STM32CubeL4 located in `examples/blinky-hal`
 ```bash
 cd examples/blinky-hal
-cmake -B build -DCMAKE_TOOLCHAIN_FILE=../../cmake/cortex-m4.cmake -DCMAKE_BUILD_TYPE=Debug -DSTM32CUBEL4_PATH=STM32CubeL4
+cmake -B build -DCMAKE_TOOLCHAIN_FILE=../../cmake/cortex-m4f.cmake -DCMAKE_BUILD_TYPE=Debug -DSTM32CUBEL4_PATH=STM32CubeL4
 cmake --build build
 ```
 
