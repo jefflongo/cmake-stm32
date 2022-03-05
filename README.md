@@ -4,7 +4,7 @@ This repository intends to add generic STM32 support to CMake. This includes `ar
 
 See `examples` for project templates.
 
-NOTE: The STM32L4 family is currently the only supported family.
+NOTE: The STM32L4 and STM32G4 families are only currently supported.
 
 ### Usage
 

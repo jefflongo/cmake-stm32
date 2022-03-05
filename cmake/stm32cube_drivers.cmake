@@ -105,3 +105,91 @@ set(LL_DRIVERS_L4
     usart
     usb
     utils)
+
+set(HAL_DRIVERS_G4
+    adc
+    adc_ex
+    comp
+    cordic
+    cortex
+    crc
+    crc_ex
+    cryp
+    cryp_ex
+    dac
+    dac_ex
+    dma
+    dma_ex
+    exti
+    fdcan
+    flash
+    flash_ex
+    flash_ramfunc
+    fmac
+    gpio
+    hrtim
+    i2c
+    i2c_ex
+    i2s
+    irda
+    iwdg
+    lptim
+    nand
+    nor
+    opamp
+    opamp_ex
+    pcd
+    pcd_ex
+    pwr
+    pwr_ex
+    qspi
+    rcc
+    rcc_ex
+    rng
+    rtc
+    rtc_ex
+    sai
+    sai_ex
+    smartcard
+    smartcard_ex
+    smbus
+    smbus_ex
+    spi
+    spi_ex
+    sram
+    tim
+    tim_ex
+    uart
+    uart_ex
+    usart
+    usart_ex
+    wwdg)
+
+set(LL_DRIVERS_G4
+    adc
+    comp
+    cordic
+    crc
+    crs
+    dac
+    dma
+    exti
+    fmac
+    fmc
+    gpio
+    hrtim
+    i2c
+    lptim
+    lpuart
+    opamp
+    pwr
+    rcc
+    rng
+    rtc
+    spi
+    tim
+    ucpd
+    usart
+    usb
+    utils)
+    
