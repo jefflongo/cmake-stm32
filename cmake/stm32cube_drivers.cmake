@@ -192,4 +192,3 @@ set(LL_DRIVERS_G4
     usart
     usb
     utils)
-    

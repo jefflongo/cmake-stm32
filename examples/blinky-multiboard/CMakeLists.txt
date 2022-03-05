@@ -17,11 +17,11 @@ add_subdirectory(src/board)
 # create an executable using the `board::stm32l412` library
 add_executable(blinky_stm32l412 src/app/main.c)
 target_link_libraries(
-  blinky_stm32l412 PRIVATE -T${CMAKE_SOURCE_DIR}/src/stm32l412.ld
-                           board::stm32l412)
+  blinky_stm32l412 PRIVATE board::stm32l412
+                           -T${CMAKE_SOURCE_DIR}/src/stm32l412.ld)
 
 # create an executable using the `board::stm32l476` library
 add_executable(blinky_stm32l476 src/app/main.c)
 target_link_libraries(
-  blinky_stm32l476 PRIVATE -T${CMAKE_SOURCE_DIR}/src/stm32l476.ld
-                           board::stm32l476)
+  blinky_stm32l476 PRIVATE board::stm32l476
+                           -T${CMAKE_SOURCE_DIR}/src/stm32l476.ld)
