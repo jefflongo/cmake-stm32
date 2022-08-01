@@ -26,7 +26,7 @@ set(CMAKE_EXE_LINKER_FLAGS_INIT
     CACHE INTERNAL "executable linker flags")
 
 set(CMAKE_C_FLAGS_DEBUG
-    "-Og -g -gdwarf-2"
+    "-Og -g3 -gdwarf-2"
     CACHE INTERNAL "c compiler debug flags")
 
 set(CMAKE_C_FLAGS_RELEASE
@@ -38,7 +38,7 @@ set(CMAKE_C_FLAGS_MINSIZEREL
     CACHE INTERNAL "c compiler min-size release flags")
 
 set(CMAKE_C_FLAGS_RELWITHDEBINFO
-    "-Og -g -gdwarf-2"
+    "-Og -g3 -gdwarf-2"
     CACHE INTERNAL "c compiler release with debug info")
 
 set(CMAKE_EXECUTABLE_SUFFIX_ASM .elf)
