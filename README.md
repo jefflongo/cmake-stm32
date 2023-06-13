@@ -18,6 +18,7 @@ CMake variables can be passed over the command line at configuration time by app
 
 Optionally, specify `-DCMAKE_BUILD_TYPE` as `Debug`, `Release`, `RelWithDebInfo` or `MinSizeRel`. By default, CMake uses an "empty" build type which does no optimization and does not include debug symbols.
 
+To avoid the complication of passing in many variables during the configure step, a [CMake Preset](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html) can be used. A template is provided with each sample. After filling in the template, the preset can be used with the `--preset` option.
 
 ### Example Projects
 
@@ -28,6 +29,12 @@ cmake -B build -DCMAKE_TOOLCHAIN_FILE=../../cmake/cortex-m4f.cmake -DCMAKE_BUILD
 cmake --build build
 ```
 
+or by using a preset:
+```bash
+cd examples/blinky-hal
+cmake --preset debug
+cmake --build build
+```
 
 ### Creating a Custom Project
 
