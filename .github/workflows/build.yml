@@ -29,24 +29,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          repository: STMicroelectronics/STM32CubeL4
 
       - name: Install dependencies
         run: |
           mkdir -p .deps
-          sudo apt install srecord
           pip install cmake
           wget -q https://developer.arm.com/-/media/Files/downloads/gnu/12.2.mpacbti-rel1/binrel/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz -P .deps
           tar -xf .deps/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz -C .deps
           echo "$(pwd)/.deps/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
 
+      - name: Checkout STM32CubeL4
+        uses: actions/checkout@v3
+        with:
+          repository: STMicroelectronics/STM32CubeL4
+          path: ./STM32CubeL4
+
       - name: Compile LL
-        run: cmake -S examples/bliny-ll --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/bliny-ll/build
+        run: echo $(pwd) && ls && cmake -S examples/blinky-ll --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
 
       - name: Compile HAL
-        run: cmake -S examples/bliny-hal --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/bliny-ll/build
+        run: cmake -S examples/blinky-hal --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
 
       - name: Compile Multiboard
-        run: cmake -S examples/bliny-multiboard --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/bliny-ll/build
+        run: cmake -S examples/blinky-multiboard --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
     
