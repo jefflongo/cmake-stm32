@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          pip install cmake-format
+
+      - name: Lint
+        run: |
+          find . \( -name CMakeLists.txt -o -name *.cmake \) -exec cmake-format --check {} +
+
+  compile:
+    name: Compile
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: STMicroelectronics/STM32CubeL4
+
+      - name: Install dependencies
+        run: |
+          mkdir -p .deps
+          sudo apt install srecord
+          pip install cmake
+          wget -q https://developer.arm.com/-/media/Files/downloads/gnu/12.2.mpacbti-rel1/binrel/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz -P .deps
+          tar -xf .deps/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz -C .deps
+          echo "$(pwd)/.deps/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
+
+      - name: Compile LL
+        run: cmake -S examples/bliny-ll --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/bliny-ll/build
+
+      - name: Compile HAL
+        run: cmake -S examples/bliny-hal --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/bliny-ll/build
+
+      - name: Compile Multiboard
+        run: cmake -S examples/bliny-multiboard --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/bliny-ll/build
+    
