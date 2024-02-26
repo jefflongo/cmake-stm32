@@ -34,18 +34,19 @@ jobs:
         run: |
           mkdir -p .deps
           pip install cmake
-          wget -q https://developer.arm.com/-/media/Files/downloads/gnu/12.2.mpacbti-rel1/binrel/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz -P .deps
-          tar -xf .deps/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz -C .deps
-          echo "$(pwd)/.deps/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
+          wget -q https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -P .deps
+          tar -xf .deps/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C .deps
+          echo "$(pwd)/.deps/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
 
       - name: Checkout STM32CubeL4
         uses: actions/checkout@v3
         with:
           repository: STMicroelectronics/STM32CubeL4
+          submodules: true
           path: ./STM32CubeL4
 
       - name: Compile LL
-        run: echo $(pwd) && ls && cmake -S examples/blinky-ll --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
+        run: cmake -S examples/blinky-ll --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
 
       - name: Compile HAL
         run: cmake -S examples/blinky-hal --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
