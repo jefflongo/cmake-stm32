@@ -13,44 +13,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: |
-          pip install cmake-format
+        run: sudo apt install -y cmake-format
 
       - name: Lint
-        run: |
-          find . \( -name CMakeLists.txt -o -name *.cmake \) -exec cmake-format --check {} +
+        run: find . \( -name CMakeLists.txt -o -name *.cmake \) -exec cmake-format --check {} +
 
   compile:
     name: Compile
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          mkdir -p .deps
-          pip install cmake
-          wget -q https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -P .deps
-          tar -xf .deps/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C .deps
-          echo "$(pwd)/.deps/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
+      - name: Install ARM toolchain
+        uses: carlosperate/arm-none-eabi-gcc-action@v1
+
+      - name: Install CMake
+        run: sudo apt install -y cmake
 
       - name: Checkout STM32CubeL4
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: STMicroelectronics/STM32CubeL4
           submodules: true
           path: ./STM32CubeL4
 
-      - name: Compile LL
+      - name: Compile blinky-ll
         run: cmake -S examples/blinky-ll --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
 
-      - name: Compile HAL
+      - name: Compile blinky-hal
         run: cmake -S examples/blinky-hal --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
 
-      - name: Compile Multiboard
+      - name: Compile blinky-multiboard
         run: cmake -S examples/blinky-multiboard --preset debug -DSTM32CUBEL4_PATH=$(pwd)/STM32CubeL4 && cmake --build examples/blinky-ll/build
     

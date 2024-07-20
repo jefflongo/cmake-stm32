@@ -17,18 +17,13 @@
                 "STM32CUBEL4_PATH": "${sourceDir}/STM32CubeL4",
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "1"
-            },
-            "condition": {
-                "type": "notEquals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
             }
         },
         {
             "name": "debug-windows",
             "inherits": "debug",
-            "displayName": "Debug",
-            "description": "Debug build preset",
+            "displayName": "Debug (Windows)",
+            "description": "Windows debug build preset",
             "generator": "MinGW Makefiles",
             "condition": {
                 "type": "equals",
@@ -43,18 +38,13 @@
             "description": "Release build preset",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
-            },
-            "condition": {
-                "type": "notEquals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
             }
         },
         {
             "name": "release-windows",
             "inherits": "debug-windows",
-            "displayName": "Release",
-            "description": "Release build preset",
+            "displayName": "Release (Windows)",
+            "description": "Windows release build preset",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
